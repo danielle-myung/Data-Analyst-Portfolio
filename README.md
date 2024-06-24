@@ -8,5 +8,9 @@ During my studies, I honed my ability to work with complex data and developed a 
 In my free time, I enjoy playing board games, trail running, and playing with my 3 cats!
 
 My CV in pdf.
+My [LinkedIn](https://www.linkedin.com/in/danielle-myung-data-analyst/) profile. 
 
 This is a repository to showcase skills, share projects and track my progress in Data Analytics / Data Science related topics.
+
+## Table of Contents
+- About Me 
