@@ -23,7 +23,7 @@ This is a repository to showcase skills, share projects and track my progress in
 In this section I will list data analytics projects briefly describing the technology stack used to solve cases.
 
 **Anomaly Detection in Mortgage Loan Defaults** 
-Code: anomaly-detection-mortgage-loan-default.ipynb
+Code: [anomaly-detection-mortgage-loan-default.ipynb](https://github.com/danielle-myung/Data-Analyst-Portfolio/blob/main/hw4.ipynb)
 
 Goal: To detect anomalous or outlier values that would indicate a mortgage loan default. 
 
