@@ -1,0 +1,208 @@
+---
+title: "grp3-final-r-code"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+date: "2024-04-19"
+---
+## Final R Code Requirements
+Share R code that contains only the final analysis. In addition, this should also include code for any charts created to corroborate the conclusions. 
+
+## Description of the research problem:
+
+The United States is experiencing a significant and sustained decline in its birth rate. The implications of this decline in the U.S. birth rate are profound, which could result in slower population growth, impacting economic growth and presenting challenges for the United States (Kearnery & Levine, 2023). In light of these problems, our research problem focuses on understanding the correlation between the decline in the U.S. birth rate and the three key factors: Gross Domestic Product (GDP), inflation rate, and immigration rate. We aim to assess whether variations in GDP, unemployment, inflation, and immigration levels correlate with changes in the U.S. birth rate and seek to contribute valuable insights to researchers and policymakers who are concerned with population trends, economic development, and public policy.
+
+## Loading & Cleaning Data
+
+CSV that contains all 55 demographic variables and 5 macroeconomic variables. 
+```{r}
+library(tidyverse); library(ggplot2); library(dplyr)
+data = read.csv('ultra_cleaned_birth_withLaborForce.csv')
+```
+
+### Reduce Variables
+
+Based on domain knowledge, we will reduce the number of variables to continue with in our analysis.
+```{r}
+data = data %>%
+  mutate(pop_fem_ratio = female_pop_thou / tot_pop) %>%
+  select(Year, # 1950 - 2022
+         pop_fem_ratio, # ratio of female population, in thousands 
+         pop_density, # persons per square km
+         median_age, # median age, in years
+         crude_birth_rate, # births per 1,000 population
+         mean_age_childbearing_years, # mean age that women have children
+         life_expectancy_birth, # life expectancy at birth, aka. avg years that infant would live if current death rates are constant
+         infant_mortality_rate, # infant deaths per 1,000 live births
+         live_birth_1, # live births surviving to age 1, in thousands
+         female_mortaltiy40, # female deaths under age 40, per 1,000 female live births
+         legal_permanent_residents, # annual number of U.S. legal permanent residents 
+         gdp_pc, # real gross domestic product per capita, in chained 2017 dollars, seasonally adjusted 
+         inflation_rate, # calculated using the Consumer Price Index, published by the Bureau of Labor Statistics
+         unemployment_rate, # in % of unemployed in the labor force
+         labor_force # in % of women employees to all employees
+                )
+```
+
+Scale Data - used in graphs
+
+## Visualize Data
+
+### Decline of Crude Birth Rate Over Time
+```{r}
+ggplot(data, aes(x=Year)) + 
+  geom_line(aes(y=crude_birth_rate), color = 'darkblue') +
+  geom_text(aes(label = "Crude Birth Rate"), x = 2010, y = -0.75, color = "darkblue", vjust = -0.5, hjust = 0) +
+  labs(y = 'Crude Birth Rate (births / 1,000 population)',
+       title = 'Trend of US Birth Rates (1950 - 2022)')
+```
+
+
+```{r}
+ggplot(data, aes(x=Year)) + 
+  geom_line(aes(y=scale(gdp_pc)), color='darkred') +
+  geom_line(aes(y=scale(crude_birth_rate)), color = 'darkblue') +
+  geom_text(aes(label = "GDP PC"), x = 2010, y = 0.75, color = "darkred", vjust = -0.5, hjust = 0) +
+  geom_text(aes(label = "Crude Birth Rate"), x = 2010, y = -0.75, color = "darkblue", vjust = -0.5, hjust = 0) +
+  labs(y = 'Value',
+       title = 'GDP & Crude Birth Rate')
+```
+
+### Unemployment Rate & Crude Birth Rate (scaled data)
+
+```{r}
+ggplot(data, aes(x=Year)) + 
+  geom_line(aes(y=scale(unemployment_rate)), color='purple') +
+  geom_line(aes(y=scale(crude_birth_rate)), color = 'darkblue') +
+  geom_text(aes(label = "Unemployment Rate"), x = 2005, y = 0.75, color = "purple", vjust = -0.5, hjust = 0) +
+  geom_text(aes(label = "Crude Birth Rate"), x = 2010, y = -0.75, color = "darkblue", vjust = -0.5, hjust = 0) +
+  labs(y = 'Value',
+       title = 'Unemployment Rate & Crude Birth Rate (scaled)')
+```
+
+### Legal Permanent Residents & Crude Birth Rate (scaled data)
+
+```{r}
+ggplot(data, aes(x=Year)) + 
+  geom_line(aes(y=scale(legal_permanent_residents)), color='darkgreen') +
+  geom_line(aes(y=scale(crude_birth_rate)), color = 'darkblue') +
+  geom_text(aes(label = "Legal Permanent Residents"), x = 2000, y = 1.60, color = "darkgreen", vjust = -0.5, hjust = 0) +
+  geom_text(aes(label = "Crude Birth Rate"), x = 2010, y = -0.75, color = "darkblue", vjust = -0.5, hjust = 0) +
+  labs(y = 'Value',
+       title = 'Legal Permanent Residents & Crude Birth Rate')
+```
+
+### Inflation Rate & Crude Birth Rate (scaled data)
+
+```{r}
+ggplot(data, aes(x=Year)) + 
+  geom_line(aes(y=scale(inflation_rate)), color='orange') +
+  geom_line(aes(y=scale(crude_birth_rate)), color = 'darkblue') +
+  geom_text(aes(label = "Inflation Rate"), x = 2010, y = 0.50, color = "orange", vjust = -0.5, hjust = 0) +
+  geom_text(aes(label = "Crude Birth Rate"), x = 2010, y = -1.5, color = "darkblue", vjust = -0.5, hjust = 0) +
+  labs(y = 'Value',
+       title = 'Inflation Rate & Crude Birth Rate')
+```
+
+### Women in the Labor Force & Crude Birth Rate (scaled data)
+
+```{r}
+ggplot(data, aes(x=Year)) + 
+  geom_line(aes(y=scale(labor_force)), color='red') +
+  geom_line(aes(y=scale(crude_birth_rate)), color = 'darkblue') +
+  geom_text(aes(label = "Women in the Labor Force"), x = 2000, y = 1.15, color = "red", vjust = -0.5, hjust = 0) +
+  geom_text(aes(label = "Crude Birth Rate"), x = 2010, y = -0.75, color = "darkblue", vjust = -0.5, hjust = 0) +
+  labs(y = 'Value',
+       title = 'Ratio of Women in the Labor Force & Crude Birth Rate')
+```
+
+## Feature Selection Using Regression Tree
+
+```{r}
+library(rpart); library(rpart.plot)
+tree = rpart(crude_birth_rate~.-Year, data = data, method = 'anova')
+summary(tree)
+```
+
+```{r}
+rpart.plot(tree)
+```
+
+```{r}
+tree$variable.importance
+```
+We will input these 10 variables we got from feature selection into our dynamic regression analysis.
+
+
+## Model
+
+### Make It Stationary
+
+```{r}
+# convert into ts 
+library(zoo); library(forecast)
+
+data_ts = read.zoo(data)
+data_ts = as.ts(data_ts)
+```
+
+```{r}
+# stationary process
+data_const_var = BoxCox(data_ts,lambda = BoxCox.lambda(data_ts))
+autoplot(data_const_var)
+```
+### Multivariate Dynamic Regression Model 
+```{r}
+fit <- auto.arima(data_const_var[,"crude_birth_rate"],lambda = 'auto',
+                  xreg=data_const_var[,c("infant_mortality_rate", "pop_density", "gdp_pc",
+                                         "female_mortaltiy40", "labor_force", 
+                                         "legal_permanent_residents",
+                                         "median_age", "life_expectancy_birth",
+                                         "pop_fem_ratio","mean_age_childbearing_years")])
+fit
+```
+### Check for White Noise
+```{r}
+checkresiduals(fit)
+```
+
+## Results
+```{r}
+library(lmtest)
+coeftest(fit)
+```
+### Visualize Results
+```{r}
+results <- data.frame( 
+  Variable = c("infant_mortality_rate", "pop_density", "gdp_pc", "female_mortaltiy40", "labor_force", "legal_permanent_residents", "median_age", "life_expectancy_birth", "pop_fem_ratio", "mean_age_childbearing_years"),
+  Estimate = c(0.05348658, -0.04346099, -0.00270366, -0.01478285, 0.04275058, 0.00011862, 0.10009594, 0.07254355, -0.25947885, -0.09138491),
+  Pr = c(1.413e-05, 0.09409, 0.37152, 0.11662, 0.01821, 0.58555, 0.01906, 0.14096, 0.66853, 0.25567)
+) %>%
+  mutate(significance = case_when(Pr < 0.05 ~ 'significant',
+                                  Pr >= 0.05 & Pr < 0.1 ~ 'marginally significant',
+                                  Pr >= 0.1 ~ 'not significant'))
+
+# order factors
+results$significance = factor(results$significance, levels = c('significant', 'marginally significant', 'not significant'))
+```
+
+
+```{r}
+ggplot(data = results, 
+       aes(x = Estimate, 
+           y = interaction(Variable, significance), 
+           fill = significance)
+       ) +
+  geom_col(position = "dodge") +
+  scale_y_discrete(limits = rev) + 
+  labs(fill = "Significance") +
+  scale_fill_manual(values = c("not significant" = "grey", 
+                               "marginally significant" = "orange", 
+                               "significant" = "lightgreen"),
+                     guide = guide_legend(title = "Significance")) +
+  theme_minimal() +
+  labs(y = "Variable",
+       title = "Variable Significance on Crude Birth Rate") +
+  theme(plot.title.position = "plot")
+```
