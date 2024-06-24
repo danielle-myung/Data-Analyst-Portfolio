@@ -13,4 +13,8 @@ My [LinkedIn](https://www.linkedin.com/in/danielle-myung-data-analyst/) profile.
 This is a repository to showcase skills, share projects and track my progress in Data Analytics / Data Science related topics.
 
 ## Table of Contents
-- About Me 
+- About Me
+- Portfolio Projects
+  - Python
+  - R
+  - SQL
